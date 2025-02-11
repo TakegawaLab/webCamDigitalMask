@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>カメラ映像をウィンドウサイズの横幅いっぱいに表示</title>
+  <style>
+    /* 余白をなくして、映像を横幅いっぱいに表示しやすくする */
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%; 
+      width: 100%;
+    }
+
+    /* video 要素が横幅いっぱいに表示されるよう設定 */
+    #video {
+      width: 100%;
+      height: auto;         /* アスペクト比を保持して高さを自動調整 */
+      display: block;       /* 余白が入らないようにブロック要素化 */
+      background: #000;     /* 読み込み前の背景を黒にするなど好みに応じて */
+    }
+  </style>
+</head>
+<body>
+  <!-- playsinline によりモバイル(iOS)でもフルスクリーン化せず埋め込む -->
+  <video id="video" autoplay playsinline></video>
+  
+  <script>
+    const video = document.getElementById("video");
+
+    navigator.mediaDevices.getUserMedia({
+      video: {
+        width: { ideal: 1280 },
+        height: { ideal: 720 }
+      },
+      audio: false
+    })
+    .then(stream => {
+      video.srcObject = stream;
+    })
+    .catch(e => {
+      console.error(e);
+    });
+  </script>
+</body>
+</html>
